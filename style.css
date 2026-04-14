@@ -1,0 +1,200 @@
+/* --- Root Variables & Reset --- */
+:root {
+    --bg-color: #0d0d0d;
+    --main-green: #00ff41;
+    --dim-green: #003b00;
+    --error-red: #ff3333;
+    --sub-color: #555555;
+    --font-main: 'Courier New', Courier, monospace;
+    --transition: 0.25s ease;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    cursor: crosshair; /* Hacker aesthetic */
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--main-green);
+    font-family: var(--font-main);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+.page-wrapper {
+    width: 100%;
+    max-width: 1000px;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}
+
+/* --- Navigation --- */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+}
+
+.nav-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-shadow: 0 0 8px var(--main-green);
+}
+
+.brand-name {
+    font-size: 1.5rem;
+    letter-spacing: -1px;
+}
+
+.nav-center {
+    display: flex;
+    background: #1a1a1a;
+    padding: 8px 15px;
+    border-radius: 5px;
+    gap: 15px;
+    align-items: center;
+    border: 1px solid var(--dim-green);
+}
+
+.config-btn, .time-btn {
+    background: none;
+    border: none;
+    color: var(--sub-color);
+    font-family: inherit;
+    font-size: 0.8rem;
+    transition: var(--transition);
+}
+
+.config-btn:hover, .time-btn:hover {
+    color: var(--main-green);
+    text-shadow: 0 0 5px var(--main-green);
+}
+
+.config-btn.active, .time-btn.active {
+    color: var(--main-green);
+}
+
+.nav-right .nav-icon-btn {
+    background: none;
+    border: none;
+    color: var(--main-green);
+    margin-left: 10px;
+    opacity: 0.7;
+}
+
+/* --- Language Selector --- */
+.language-selector-container {
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--sub-color);
+}
+
+/* --- Typing Area --- */
+.typing-test-container {
+    position: relative;
+    font-size: 1.5rem;
+    line-height: 1.5;
+    min-height: 120px;
+}
+
+.words-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6em;
+    user-select: none;
+}
+
+.word {
+    color: var(--dim-green);
+    transition: var(--transition);
+}
+
+.char {
+    position: relative;
+}
+
+/* Active and Corrected States */
+.word.active-word {
+    color: var(--sub-color);
+}
+
+.char.correct {
+    color: var(--main-green);
+    text-shadow: 0 0 2px var(--main-green);
+}
+
+.char.incorrect {
+    color: var(--error-red);
+    text-shadow: 0 0 5px var(--error-red);
+}
+
+/* --- The Caret (Cursor) --- */
+.caret {
+    position: absolute;
+    width: 2px;
+    height: 1.5rem;
+    background-color: var(--main-green);
+    animation: blink 1s infinite;
+    box-shadow: 0 0 10px var(--main-green);
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+/* --- Hidden Input --- */
+.typing-input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* --- Reset Button --- */
+.controls-footer {
+    display: flex;
+    justify-content: center;
+}
+
+.reset-btn {
+    background: none;
+    border: none;
+    color: var(--sub-color);
+    transition: all 0.3s ease;
+}
+
+.reset-btn:hover {
+    color: var(--main-green);
+    transform: rotate(180deg);
+    filter: drop-shadow(0 0 8px var(--main-green));
+}
+
+/* --- Dynamic Animations on Clicks --- */
+.config-btn:active, .time-btn:active, .reset-btn:active {
+    transform: scale(0.9);
+    filter: brightness(1.5);
+}
+
+/* Adding a 'Glitch' flash to the whole container on specific interactions */
+.glitch-flash {
+    animation: glitch 0.2s linear;
+}
+
+@keyframes glitch {
+    0% { transform: translate(0); }
+    20% { transform: translate(-2px, 2px); background: rgba(0,255,65,0.1); }
+    40% { transform: translate(-2px, -2px); }
+    60% { transform: translate(2px, 2px); }
+    80% { transform: translate(2px, -2px); }
+    100% { transform: translate(0); }
+}
