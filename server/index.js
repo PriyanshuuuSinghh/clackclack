@@ -1,100 +1,184 @@
+
 const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
 const path = require('path');
 
 const app = express();
+
 const server = http.createServer(app);
+
 const io = new Server(server, {
-    cors: { origin: "*" } 
+    cors: {
+        origin: "*"
+    }
 });
 
-// Serve static files
-app.use(express.static(path.join(__dirname, '..')));
+/* =========================
+   STATIC FILES
+========================= */
 
-// Serve index.html
+app.use(express.static(__dirname));
+
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'index.html'));
+
+    res.sendFile(path.join(__dirname, 'index.html'));
 });
+
+/* =========================
+   ROOMS
+========================= */
 
 let rooms = {};
 
+/* =========================
+   SOCKET CONNECTION
+========================= */
+
 io.on('connection', (socket) => {
+
     console.log('✅ User Connected:', socket.id);
 
+    /* CREATE ROOM */
     socket.on('create-room', () => {
-        const roomId = Math.floor(1000 + Math.random() * 9000).toString();
-        rooms[roomId] = { players: [] };
+
+        const roomId =
+            Math.floor(1000 + Math.random() * 9000).toString();
+
+        rooms[roomId] = {
+            players: []
+        };
+
         socket.join(roomId);
-        rooms[roomId].players.push({ id: socket.id, progress: 0 });
+
+        rooms[roomId].players.push({
+            id: socket.id,
+            progress: 0
+        });
+
         socket.emit('room-created', roomId);
+
         console.log(`🏠 Room created: ${roomId}`);
     });
 
-   socket.on('join-room', (roomId) => {
-    if (rooms[roomId]) {
+    /* JOIN ROOM */
+    socket.on('join-room', (roomId) => {
+
+        if (!rooms[roomId]) return;
+
         socket.join(roomId);
 
-        if (!rooms[roomId].players.find(p => p.id === socket.id)) {
-            rooms[roomId].players.push({ id: socket.id, progress: 0 });
+        if (
+            !rooms[roomId].players.find(
+                p => p.id === socket.id
+            )
+        ) {
+
+            rooms[roomId].players.push({
+                id: socket.id,
+                progress: 0
+            });
         }
 
-        io.to(roomId).emit('update-ghosts', rooms[roomId].players);
+        io.to(roomId)
+        .emit('update-ghosts', rooms[roomId].players);
 
-        console.log(`👥 User ${socket.id} joined room ${roomId}`);
+        console.log(
+            `👥 User ${socket.id} joined room ${roomId}`
+        );
 
-     if (rooms[roomId].players.length === 2) {
-    console.log("  Starting countdown...");
+        /* START COUNTDOWN */
+        if (rooms[roomId].players.length === 2) {
 
-    io.to(roomId).emit('countdown', 3);
+            let count = 3;
 
-let count = 3;
+            const interval = setInterval(() => {
 
-const interval = setInterval(() => {
+                io.to(roomId).emit('countdown', count);
 
-    io.to(roomId).emit('countdown', count);
+                if (count === 1) {
 
-    if (count === 1) {
+                    clearInterval(interval);
 
-        clearInterval(interval);
+                    setTimeout(() => {
 
-        setTimeout(() => {
+                        io.to(roomId)
+                        .emit('race-begin');
 
-            io.to(roomId).emit('race-begin');
+                    }, 1000);
+                }
 
-        }, 1000);
-    }
+                count--;
 
-    count--;
-
-}, 1000);
-
-    socket.on('update-progress', ({ roomId, progress }) => {
-        if (rooms[roomId]) {
-            const player = rooms[roomId].players.find(p => p.id === socket.id);
-            if (player) {
-                player.progress = progress;
-                io.to(roomId).emit('update-ghosts', rooms[roomId].players);
-            }
+            }, 1000);
         }
     });
-    socket.on('player-finished', (roomId) => {
-    if (rooms[roomId]) {
-        console.log(" Winner:", socket.id);
 
-        io.to(roomId).emit('race-ended', socket.id);
-    }
-});
+    /* UPDATE PROGRESS */
+    socket.on('update-progress', ({ roomId, progress }) => {
 
-    socket.on('disconnect', () => {
-        for (const roomId in rooms) {
-            rooms[roomId].players = rooms[roomId].players.filter(p => p.id !== socket.id);
-            io.to(roomId).emit('update-ghosts', rooms[roomId].players);
-            if (rooms[roomId].players.length === 0) delete rooms[roomId];
+        if (!rooms[roomId]) return;
+
+        const player =
+            rooms[roomId].players.find(
+                p => p.id === socket.id
+            );
+
+        if (player) {
+
+            player.progress = progress;
+
+            io.to(roomId)
+            .emit('update-ghosts', rooms[roomId].players);
         }
+    });
+
+    /* FINISH EVENT */
+    socket.on('player-finished', (roomId) => {
+
+        if (!rooms[roomId]) return;
+
+        console.log("🏆 Winner:", socket.id);
+
+        io.to(roomId)
+        .emit('race-ended', socket.id);
+    });
+
+    /* DISCONNECT */
+    socket.on('disconnect', () => {
+
+        for (const roomId in rooms) {
+
+            rooms[roomId].players =
+                rooms[roomId].players.filter(
+                    p => p.id !== socket.id
+                );
+
+            io.to(roomId)
+            .emit('update-ghosts', rooms[roomId].players);
+
+            if (
+                rooms[roomId].players.length === 0
+            ) {
+
+                delete rooms[roomId];
+            }
+        }
+
         console.log('❌ User Disconnected:', socket.id);
     });
 });
 
+/* =========================
+   SERVER
+========================= */
+
 const PORT = process.env.PORT || 3000;
-server.listen(PORT, () => console.log(`🚀 SERVER LIVE AT http://localhost:${PORT}`));
+
+server.listen(PORT, () => {
+
+    console.log(
+        `🚀 SERVER LIVE ON PORT ${PORT}`
+    );
+});
+
