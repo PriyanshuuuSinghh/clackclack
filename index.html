@@ -8,161 +8,172 @@
     <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
-<div id="countdown-overlay" class="hidden">3</div>
-<div id="winner-overlay" class="hidden">
-
-    <div class="winner-box">
-
-        <h1 id="winner-text">🏆 YOU WIN!</h1>
-
-        <button id="play-again-btn">
-            PLAY AGAIN
-        </button>
-
-    </div>
-
-</div>
 
 <body>
 
-    <div class="page-wrapper">
-        <header class="navbar">
-            <div class="nav-left">
-                <svg viewBox="0 0 24 24" width="28" height="28" fill="var(--main-green)">
-                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
-                </svg>
-                <span>Typing Test <span id="mode-indicator"
-                        style="font-size: 0.7rem; opacity: 0.5;">[SOLO]</span></span>
-            </div>
-            <div class="nav-center">
-                <span class="config-item config-btn" id="multiplayer-mode-btn">/ multiplayer</span>
-                <span class="config-item config-btn" id="punctuation-toggle">@ punctuation</span>
-                <span class="config-item config-btn" id="numbers-toggle"># numbers</span>
+    <body>
 
-                <div class="time-group">
-                    <div id="timer-display" class="big-timer">15</div>
-                    <span class="time-option active" data-time="15">15</span>
-                    <span class="time-option" data-time="30">30</span>
-                    <span class="time-option" data-time="60">60</span>
-                    <span class="time-option" data-time="120">120</span>
-                </div>
-            </div>
-            <div class="nav-right" style="color: var(--main-green); opacity: 0.8;">
-                <span id="sound-toggle" class="sound-btn" title="Toggle sound">🔔</span>
-            </div>
-        </header>
-
-        <div id="multiplayer-lobby" class="hidden">
-            <div class="lobby-container">
-                <input type="text" id="room-input" placeholder="room_code" maxlength="4">
-                <button id="join-btn" class="config-btn">JOIN_RACE</button>
-                <span style="opacity: 0.3">|</span>
-                <button id="create-btn" class="config-btn">CREATE_LOBBY</button>
-                <div id="lobby-status">Initialize multiplayer connection...</div>
-            </div>
+        <div id="countdown-overlay" class="hidden">
+            3
         </div>
 
-        <div id="race-track-container" class="hidden">
+        <div id="winner-overlay" class="hidden">
 
-    <div class="race-track">
+            <div class="winner-box">
 
-        <div class="lane">
+                <h1 id="winner-text">🏆 YOU WIN!</h1>
 
-    <div class="runner-container" id="p1-container">
-        <div id="p1-runner" class="runner">🏃‍➡️</div>
-    </div>
+                <button id="play-again-btn">
+                    PLAY AGAIN
+                </button>
 
-</div>
-
-<div class="lane">
-
-    <div class="runner-container" id="p2-container">
-        <div id="p2-runner" class="runner">🏃‍➡️</div>
-    </div>
-
-</div>
-
-        <div class="finish-line">🏁</div>
-
-    </div>
-
-</div>
-
-        <div class="live-stats-bar">
-            <div class="stat-block">
-                <span class="stat-label">wpm</span>
-                <span class="stat-value" id="live-wpm">–</span>
             </div>
-            <div class="stat-block">
-                <span class="stat-label">acc</span>
-                <span class="stat-value" id="live-accuracy">–</span>
-            </div>
-            <div class="stat-block">
-                <span class="stat-label">pb</span>
-                <span class="stat-value personal-best" id="personal-best">–</span>
-            </div>
+
         </div>
 
-        <main class="typing-test-container">
-            <div id="words-clip">
-                <div id="caret" class="caret"></div>
-                <div id="words-wrapper" class="words-wrapper"></div>
+        <div class="page-wrapper">
+
+
+
+            <div class="page-wrapper">
+                <header class="navbar">
+                    <div class="nav-left">
+                        <svg viewBox="0 0 24 24" width="28" height="28" fill="var(--main-green)">
+                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                        </svg>
+                        <span>Typing Test <span id="mode-indicator"
+                                style="font-size: 0.7rem; opacity: 0.5;">[SOLO]</span></span>
+                    </div>
+                    <div class="nav-center">
+                        <span class="config-item config-btn" id="multiplayer-mode-btn">/ multiplayer</span>
+                        <span class="config-item config-btn" id="punctuation-toggle">@ punctuation</span>
+                        <span class="config-item config-btn" id="numbers-toggle"># numbers</span>
+
+                        <div class="time-group">
+                            <div id="timer-display" class="big-timer">15</div>
+                            <span class="time-option active" data-time="15">15</span>
+                            <span class="time-option" data-time="30">30</span>
+                            <span class="time-option" data-time="60">60</span>
+                            <span class="time-option" data-time="120">120</span>
+                        </div>
+                    </div>
+                    <div class="nav-right" style="color: var(--main-green); opacity: 0.8;">
+                        <span id="sound-toggle" class="sound-btn" title="Toggle sound">🔔</span>
+                    </div>
+                </header>
+
+                <div id="multiplayer-lobby" class="hidden">
+                    <div class="lobby-container">
+                        <input type="text" id="room-input" placeholder="room_code" maxlength="4">
+                        <button id="join-btn" class="config-btn">JOIN_RACE</button>
+                        <span style="opacity: 0.3">|</span>
+                        <button id="create-btn" class="config-btn">CREATE_LOBBY</button>
+                        <div id="lobby-status">Initialize multiplayer connection...</div>
+                    </div>
+                </div>
+
+                <div id="race-track-container" class="hidden">
+
+                    <div class="race-track">
+
+                        <div class="lane">
+
+                            <div class="runner-container" id="p1-container">
+                                <div id="p1-runner" class="runner">🏃‍➡️</div>
+                            </div>
+
+                        </div>
+
+                        <div class="lane">
+
+                            <div class="runner-container" id="p2-container">
+                                <div id="p2-runner" class="runner">🏃‍➡️</div>
+                            </div>
+
+                        </div>
+
+                        <div class="finish-line">🏁</div>
+
+                    </div>
+
+                </div>
+
+                <div class="live-stats-bar">
+                    <div class="stat-block">
+                        <span class="stat-label">wpm</span>
+                        <span class="stat-value" id="live-wpm">–</span>
+                    </div>
+                    <div class="stat-block">
+                        <span class="stat-label">acc</span>
+                        <span class="stat-value" id="live-accuracy">–</span>
+                    </div>
+                    <div class="stat-block">
+                        <span class="stat-label">pb</span>
+                        <span class="stat-value personal-best" id="personal-best">–</span>
+                    </div>
+                </div>
+
+                <main class="typing-test-container">
+                    <div id="words-clip">
+                        <div id="caret" class="caret"></div>
+                        <div id="words-wrapper" class="words-wrapper"></div>
+                    </div>
+                    <input type="text" id="typing-input" autocomplete="off" autofocus>
+                </main>
+
+                <footer class="footer">
+                    <button class="reset-btn" id="reset-test">⟳</button>
+                </footer>
+
+                <div id="result-screen" class="result-screen hidden">
+                    <div class="result-header">
+                        <span class="result-mode-tag">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="var(--main-green)"
+                                style="margin-right:5px">
+                                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+                            </svg>
+                            time · <span id="result-mode-label">15</span>s
+                        </span>
+                        <span class="new-pb hidden" id="new-pb-badge">🎉 NEW PB!</span>
+                    </div>
+
+                    <div class="result-stats">
+                        <div class="result-primary">
+                            <div class="result-big-label">wpm</div>
+                            <div class="result-big-value" id="final-wpm">0</div>
+                        </div>
+                        <div class="result-primary">
+                            <div class="result-big-label">acc</div>
+                            <div class="result-big-value" id="final-accuracy">0%</div>
+                        </div>
+                    </div>
+
+                    <div class="result-secondary">
+                        <div class="result-small-block">
+                            <div class="result-small-label">correct</div>
+                            <div class="result-small-value correct-color" id="final-correct">0</div>
+                        </div>
+                        <div class="result-small-block">
+                            <div class="result-small-label">incorrect</div>
+                            <div class="result-small-value error-color" id="final-incorrect">0</div>
+                        </div>
+                        <div class="result-small-block">
+                            <div class="result-small-label">time</div>
+                            <div class="result-small-value" id="final-time">0s</div>
+                        </div>
+                        <div class="result-small-block">
+                            <div class="result-small-label">raw</div>
+                            <div class="result-small-value" id="final-raw">0</div>
+                        </div>
+                    </div>
+
+                    <div class="result-actions">
+                        <button class="result-restart-btn" id="restart-btn">⟳ &nbsp;restart</button>
+                    </div>
+                </div>
             </div>
-            <input type="text" id="typing-input" autocomplete="off" autofocus>
-        </main>
 
-        <footer class="footer">
-            <button class="reset-btn" id="reset-test">⟳</button>
-        </footer>
-
-        <div id="result-screen" class="result-screen hidden">
-            <div class="result-header">
-                <span class="result-mode-tag">
-                    <svg viewBox="0 0 24 24" width="14" height="14" fill="var(--main-green)" style="margin-right:5px">
-                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-                    </svg>
-                    time · <span id="result-mode-label">15</span>s
-                </span>
-                <span class="new-pb hidden" id="new-pb-badge">🎉 NEW PB!</span>
-            </div>
-
-            <div class="result-stats">
-                <div class="result-primary">
-                    <div class="result-big-label">wpm</div>
-                    <div class="result-big-value" id="final-wpm">0</div>
-                </div>
-                <div class="result-primary">
-                    <div class="result-big-label">acc</div>
-                    <div class="result-big-value" id="final-accuracy">0%</div>
-                </div>
-            </div>
-
-            <div class="result-secondary">
-                <div class="result-small-block">
-                    <div class="result-small-label">correct</div>
-                    <div class="result-small-value correct-color" id="final-correct">0</div>
-                </div>
-                <div class="result-small-block">
-                    <div class="result-small-label">incorrect</div>
-                    <div class="result-small-value error-color" id="final-incorrect">0</div>
-                </div>
-                <div class="result-small-block">
-                    <div class="result-small-label">time</div>
-                    <div class="result-small-value" id="final-time">0s</div>
-                </div>
-                <div class="result-small-block">
-                    <div class="result-small-label">raw</div>
-                    <div class="result-small-value" id="final-raw">0</div>
-                </div>
-            </div>
-
-            <div class="result-actions">
-                <button class="result-restart-btn" id="restart-btn">⟳ &nbsp;restart</button>
-            </div>
-        </div>
-    </div>
-
-    <script type="module" src="script.js"></script>
-</body>
+            <script type="module" src="script.js"></script>
+    </body>
 
 </html>

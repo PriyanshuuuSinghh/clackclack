@@ -395,9 +395,7 @@ body {
     box-shadow: 0 0 12px rgba(0, 255, 65, 0.15);
 }
 
-/* --- Multiplayer UI Styles --- */
 
-/* Hide elements when they aren't needed */
 .hidden {
     display: none !important;
 }
@@ -452,7 +450,7 @@ body {
     height: 4px;
     background: #1a1a1a;
     position: relative;
-    margin-bottom: 30px; /* Space for the ghost name */
+    margin-bottom: 30px; 
 }
 
 .ghost {
@@ -469,7 +467,7 @@ body {
 }
 
 .ghost.opponent {
-    background: #444; /* Dimmer for the friend */
+    background: #444; 
     color: #fff;
 }
 
