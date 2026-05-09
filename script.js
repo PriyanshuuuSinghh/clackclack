@@ -1,5 +1,5 @@
 /* ======================================================
-   ZONE 1: DOM ELEMENTS (Declare FIRST)
+   ZONE 1: DOM ELEMENTS (Declared FIRST)
    ====================================================== */
 //    import { updateMyRunner, updateOpponentRunner } from './raceUI.js';
 import {
