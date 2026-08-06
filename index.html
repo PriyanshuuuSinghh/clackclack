@@ -1,179 +1,601 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="cyber-green">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Typing Test | Hacker Edition</title>
+    <title>ClackClack // Cyber Typing Matrix</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <body>
+    <!-- CYBER BACKGROUND CANVAS & OVERLAYS -->
+    <canvas id="cyber-bg-canvas"></canvas>
+    <canvas id="confetti-canvas"></canvas>
+    <div class="cyber-grid-overlay"></div>
+    <div class="scanline-overlay"></div>
 
-        <div id="countdown-overlay" class="hidden">
-            3
+    <!-- FIXED GITHUB CORNER BADGE (Visible on all pages except Multiplayer) -->
+    <a href="https://github.com/PriyanshuuuSinghh" target="_blank" rel="noopener noreferrer" id="github-corner-badge" class="github-corner-badge" title="View Priyanshu on GitHub">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
+        </svg>
+        <span>GitHub</span>
+    </a>
+
+    <!-- TERMINAL BOOT LOADER -->
+    <div id="boot-loader">
+        <div class="boot-box">
+            <div class="boot-header">
+                <span>// SYSTEM_INITIALIZATION</span>
+                <span>ClackClack v3.8</span>
+            </div>
+            <div class="boot-log" id="boot-log">
+                <div class="boot-log-line"><span class="tag">[OK]</span> Core matrix engine initialized</div>
+                <div class="boot-log-line"><span class="tag">[OK]</span> Socket telemetry link online</div>
+                <div class="boot-log-line"><span class="tag">[OK]</span> Mechanical sound synthesizer calibrated</div>
+                <div class="boot-log-line"><span class="tag">[OK]</span> ClackClack visual tokens active</div>
+            </div>
+            <div class="boot-progress-bar">
+                <div class="boot-progress-fill" id="boot-progress-fill"></div>
+            </div>
         </div>
+    </div>
 
-        <div id="winner-overlay" class="hidden">
+    <!-- FULLSCREEN COUNTDOWN OVERLAY -->
+    <div id="countdown-overlay" class="modal-overlay">
+        <div class="modal-box countdown-box">
+            <div style="font-size: 0.8rem; letter-spacing: 3px; color: var(--accent-primary); font-weight: 800;">// MATCH_COUNTDOWN</div>
+            <div id="countdown-num" class="countdown-num-pulse">3</div>
+            <div style="font-size: 0.85rem; color: var(--text-secondary);" id="countdown-subtext">GET YOUR FINGERS READY</div>
+        </div>
+    </div>
 
-            <div class="winner-box">
+    <!-- WINNER / RESULT OVERLAY MODAL -->
+    <div id="winner-overlay" class="modal-overlay">
+        <div class="modal-box">
+            <div style="font-size: 0.8rem; letter-spacing: 2px; color: var(--accent-primary);" id="winner-subtitle">// MATCH_RESULT</div>
+            <h1 id="winner-text" style="font-size: 2.2rem; font-weight: 800; color: var(--text-primary);">🏆 VICTORY ACHIEVED</h1>
+            <div id="winner-stats-summary" style="font-size: 0.9rem; color: var(--text-secondary);">WPM: -- | Accuracy: --%</div>
+            <button id="play-again-btn" class="cyber-btn" style="margin: 0 auto; width: 200px;">
+                <span>RETURN TO LOBBY</span>
+            </button>
+        </div>
+    </div>
 
-                <h1 id="winner-text">🏆 YOU WIN!</h1>
+    <!-- APPLICATION CONTAINER -->
+    <div class="app-container">
 
-                <button id="play-again-btn">
-                    PLAY AGAIN
-                </button>
-
+        <!-- STICKY NAVBAR -->
+        <header class="navbar">
+            <div class="nav-brand" id="nav-brand-logo">
+                <svg class="brand-logo-svg" viewBox="0 0 64 64" fill="none">
+                    <rect width="64" height="64" rx="14" fill="#050505" stroke="var(--accent-primary)" stroke-width="2"/>
+                    <path d="M16 20 H48 V44 H16 Z" fill="none" stroke="var(--accent-primary)" stroke-width="3" stroke-linejoin="round"/>
+                    <path d="M22 28 H30 M22 36 H38 M34 28 H42" stroke="var(--accent-primary)" stroke-width="3" stroke-linecap="round"/>
+                </svg>
+                <span class="brand-title">CLACK<span style="color: var(--accent-primary);">CLACK</span></span>
+                <span class="brand-tag">Matrix Edition</span>
             </div>
 
-        </div>
+            <nav class="nav-links">
+                <button class="nav-item active" data-target="play-view">
+                    <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                    <span>Play</span>
+                </button>
+                <button class="nav-item" data-target="practice-view">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v8M8 12h8"></path></svg>
+                    <span>Practice</span>
+                </button>
+                <button class="nav-item" data-target="multiplayer-view" id="multiplayer-nav-tab">
+                    <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                    <span>Multiplayer</span>
+                </button>
+                <button class="nav-item" data-target="leaderboard-view">
+                    <svg viewBox="0 0 24 24"><path d="M6 9H3a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1V10a1 1 0 0 0-1-1zM14 4h-3a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1zM22 13h-3a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-7a1 1 0 0 0-1-1z"></path></svg>
+                    <span>Leaderboard</span>
+                </button>
+                <button class="nav-item" data-target="stats-view">
+                    <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                    <span>Statistics</span>
+                </button>
+                <button class="nav-item" data-target="profile-view">
+                    <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    <span>Profile</span>
+                </button>
+                <button class="nav-item" data-target="settings-view">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                    <span>Settings</span>
+                </button>
+            </nav>
 
-        <div class="page-wrapper">
+            <!-- PROMINENT HIGHLIGHTED NAVBAR CONTROLS -->
+            <div class="nav-controls">
+                <button class="nav-ctrl-btn" id="theme-toggle-btn" title="Cycle Color Theme">
+                    <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" fill="none" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path></svg>
+                    <span id="theme-btn-label">THEME: GREEN</span>
+                </button>
+                <button class="nav-ctrl-btn active" id="sound-toggle-btn" title="Toggle Mechanical Audio">
+                    <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" fill="none" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                    <span id="sound-btn-label">SOUND: ON</span>
+                </button>
+            </div>
+        </header>
 
+        <!-- MAIN VIEW PORT -->
+        <main style="flex: 1; display: flex; flex-direction: column;">
 
-
-            <div class="page-wrapper">
-                <header class="navbar">
-                    <div class="nav-left">
-                        <svg viewBox="0 0 24 24" width="28" height="28" fill="var(--main-green)">
-                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
-                        </svg>
-                        <span>Typing Test <span id="mode-indicator"
-                                style="font-size: 0.7rem; opacity: 0.5;">[SOLO]</span></span>
-                    </div>
-                    <div class="nav-center">
-                        <span class="config-item config-btn" id="multiplayer-mode-btn">/ multiplayer</span>
-                        <span class="config-item config-btn" id="punctuation-toggle">@ punctuation</span>
-                        <span class="config-item config-btn" id="numbers-toggle"># numbers</span>
-
-                        <div class="time-group">
-                            <div id="timer-display" class="big-timer">15</div>
-                            <span class="time-option active" data-time="15">15</span>
-                            <span class="time-option" data-time="30">30</span>
-                            <span class="time-option" data-time="60">60</span>
-                            <span class="time-option" data-time="120">120</span>
+            <!-- 1. PLAY VIEW (SOLO TYPING ARENA) -->
+            <section id="play-view" class="page-view active">
+                <div class="arena-header">
+                    <div class="config-bar">
+                        <div class="config-group">
+                            <span class="config-option" id="punctuation-toggle">@ punctuation</span>
+                            <span class="config-option" id="numbers-toggle"># numbers</span>
+                        </div>
+                        <div class="config-group">
+                            <span class="config-option active time-option" data-time="15">15s</span>
+                            <span class="config-option time-option" data-time="30">30s</span>
+                            <span class="config-option time-option" data-time="60">60s</span>
+                            <span class="config-option time-option" data-time="120">120s</span>
                         </div>
                     </div>
-                    <div class="nav-right" style="color: var(--main-green); opacity: 0.8;">
-                        <span id="sound-toggle" class="sound-btn" title="Toggle sound">🔔</span>
-                    </div>
-                </header>
 
-                <div id="multiplayer-lobby" class="hidden">
-                    <div class="lobby-container">
-                        <input type="text" id="room-input" placeholder="room_code" maxlength="4">
-                        <button id="join-btn" class="config-btn">JOIN_RACE</button>
-                        <span style="opacity: 0.3">|</span>
-                        <button id="create-btn" class="config-btn">CREATE_LOBBY</button>
-                        <div id="lobby-status">Initialize multiplayer connection...</div>
+                    <div class="live-stats-bar">
+                        <div class="stat-box">
+                            <span class="stat-label">WPM</span>
+                            <span class="stat-value" id="live-wpm">--</span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-label">ACCURACY</span>
+                            <span class="stat-value" id="live-accuracy">--</span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-label">TIME</span>
+                            <span class="stat-value secondary" id="live-timer">15</span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-label">BEST</span>
+                            <span class="stat-value secondary" id="personal-best">--</span>
+                        </div>
                     </div>
                 </div>
 
-                <div id="race-track-container" class="hidden">
-
-                    <div class="race-track">
-
-                        <div class="lane">
-
-                            <div class="runner-container" id="p1-container">
-                                <div id="p1-runner" class="runner">🏃‍➡️</div>
-                            </div>
-
-                        </div>
-
-                        <div class="lane">
-
-                            <div class="runner-container" id="p2-container">
-                                <div id="p2-runner" class="runner">🏃‍➡️</div>
-                            </div>
-
-                        </div>
-
-                        <div class="finish-line">🏁</div>
-
-                    </div>
-
-                </div>
-
-                <div class="live-stats-bar">
-                    <div class="stat-block">
-                        <span class="stat-label">wpm</span>
-                        <span class="stat-value" id="live-wpm">–</span>
-                    </div>
-                    <div class="stat-block">
-                        <span class="stat-label">acc</span>
-                        <span class="stat-value" id="live-accuracy">–</span>
-                    </div>
-                    <div class="stat-block">
-                        <span class="stat-label">pb</span>
-                        <span class="stat-value personal-best" id="personal-best">–</span>
-                    </div>
-                </div>
-
-                <main class="typing-test-container">
+                <!-- TYPING ARENA CARD -->
+                <div class="typing-arena-card" id="typing-arena-card">
                     <div id="words-clip">
                         <div id="caret" class="caret"></div>
                         <div id="words-wrapper" class="words-wrapper"></div>
                     </div>
-                    <input type="text" id="typing-input" autocomplete="off" autofocus>
-                </main>
+                    <input type="text" id="typing-input" autocomplete="off" autofocus placeholder="">
+                </div>
 
-                <footer class="footer">
-                    <button class="reset-btn" id="reset-test">⟳</button>
-                </footer>
+                <div class="arena-controls">
+                    <button class="cyber-btn cyber-btn-outline" id="reset-test-btn">
+                        <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" fill="none" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
+                        <span>RESTART TEST</span>
+                    </button>
+                </div>
 
-                <div id="result-screen" class="result-screen hidden">
+                <!-- RESULT HUD SCREEN -->
+                <div id="result-screen" class="result-card" style="display: none;">
                     <div class="result-header">
-                        <span class="result-mode-tag">
-                            <svg viewBox="0 0 24 24" width="14" height="14" fill="var(--main-green)"
-                                style="margin-right:5px">
-                                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-                            </svg>
-                            time · <span id="result-mode-label">15</span>s
-                        </span>
-                        <span class="new-pb hidden" id="new-pb-badge">🎉 NEW PB!</span>
+                        <div class="result-title-group">
+                            <span style="font-size: 1.2rem; font-weight: 800; color: var(--text-primary);">// TEST_TELEMETRY_SUMMARY</span>
+                            <span class="pb-badge" id="new-pb-badge" style="display: none;">🎉 NEW PB RECORD</span>
+                        </div>
+                        <button class="cyber-btn" id="result-restart-btn">
+                            <span>RESTART TEST</span>
+                        </button>
                     </div>
 
-                    <div class="result-stats">
-                        <div class="result-primary">
-                            <div class="result-big-label">wpm</div>
-                            <div class="result-big-value" id="final-wpm">0</div>
+                    <div class="result-grid">
+                        <div class="result-metric">
+                            <span class="label">FINAL WPM</span>
+                            <span class="value" id="final-wpm">0</span>
                         </div>
-                        <div class="result-primary">
-                            <div class="result-big-label">acc</div>
-                            <div class="result-big-value" id="final-accuracy">0%</div>
+                        <div class="result-metric">
+                            <span class="label">ACCURACY</span>
+                            <span class="value white" id="final-accuracy">0%</span>
                         </div>
-                    </div>
-
-                    <div class="result-secondary">
-                        <div class="result-small-block">
-                            <div class="result-small-label">correct</div>
-                            <div class="result-small-value correct-color" id="final-correct">0</div>
+                        <div class="result-metric">
+                            <span class="label">CORRECT CHARS</span>
+                            <span class="value white" id="final-correct">0</span>
                         </div>
-                        <div class="result-small-block">
-                            <div class="result-small-label">incorrect</div>
-                            <div class="result-small-value error-color" id="final-incorrect">0</div>
-                        </div>
-                        <div class="result-small-block">
-                            <div class="result-small-label">time</div>
-                            <div class="result-small-value" id="final-time">0s</div>
-                        </div>
-                        <div class="result-small-block">
-                            <div class="result-small-label">raw</div>
-                            <div class="result-small-value" id="final-raw">0</div>
+                        <div class="result-metric">
+                            <span class="label">RAW SPEED</span>
+                            <span class="value white" id="final-raw">0 WPM</span>
                         </div>
                     </div>
 
-                    <div class="result-actions">
-                        <button class="result-restart-btn" id="restart-btn">⟳ &nbsp;restart</button>
+                    <div class="result-chart-box">
+                        <svg id="result-chart-svg" width="100%" height="100%" viewBox="0 0 500 150" preserveAspectRatio="none"></svg>
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <script type="module" src="script.js"></script>
-    </body>
+            <!-- 2. PRACTICE VIEW -->
+            <section id="practice-view" class="page-view">
+                <div class="cyber-card">
+                    <div class="card-title">
+                        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v8M8 12h8"></path></svg>
+                        <span>Precision Practice & Key Drills</span>
+                    </div>
+                    <p style="color: var(--text-secondary); font-size: 0.85rem;">Select custom target keys or specialized drills to isolate accuracy bottlenecks.</p>
+                    
+                    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+                        <div class="config-group" id="practice-category-group">
+                            <span class="config-option active" data-drill="trigrams">Common Trigrams</span>
+                            <span class="config-option" data-drill="weak">Weak Finger Drills</span>
+                            <span class="config-option" data-drill="code">Code Syntaxes</span>
+                            <span class="config-option" data-drill="symbols">Special Characters</span>
+                        </div>
+
+                        <div class="live-stats-bar">
+                            <div class="stat-box">
+                                <span class="stat-label">WPM</span>
+                                <span class="stat-value" id="practice-wpm">--</span>
+                            </div>
+                            <div class="stat-box">
+                                <span class="stat-label">ACCURACY</span>
+                                <span class="stat-value" id="practice-accuracy">--</span>
+                            </div>
+                            <div class="stat-box">
+                                <span class="stat-label">ERRORS</span>
+                                <span class="stat-value secondary" id="practice-errors">0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="typing-arena-card" id="practice-arena-card" style="min-height: 200px;">
+                        <div id="practice-words-clip" style="position: relative; height: 130px; overflow: hidden; line-height: 2.2; font-size: 1.5rem; user-select: none;">
+                            <div id="practice-caret" class="caret"></div>
+                            <div id="practice-words-wrapper" class="words-wrapper"></div>
+                        </div>
+                        <input type="text" id="practice-typing-input" autocomplete="off">
+                    </div>
+
+                    <div style="display: flex; justify-content: center; gap: 12px;">
+                        <button class="cyber-btn cyber-btn-outline" id="practice-restart-btn">
+                            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" fill="none" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
+                            <span>RELOAD DRILL</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. MULTIPLAYER VIEW (SEPARATED COMPETITIVE 4-STAGE FLOW) -->
+            <section id="multiplayer-view" class="page-view">
+
+                <!-- STAGE 1: PRE-RACE LOBBY -->
+                <div id="mp-stage-lobby" class="mp-stage active">
+                    <div class="lobby-grid">
+                        <div class="cyber-card">
+                            <div class="card-title">
+                                <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
+                                <span>Cyber Competitive Matchmaking</span>
+                            </div>
+
+                            <div class="lobby-form-grid">
+                                <div class="form-field">
+                                    <label class="form-label">YOUR PILOT USERNAME</label>
+                                    <input type="text" id="mp-username-input" class="cyber-input" placeholder="Enter Username..." maxlength="16">
+                                </div>
+
+                                <div class="form-field">
+                                    <label class="form-label">SELECT RACE DURATION</label>
+                                    <div class="config-group" id="mp-time-select">
+                                        <span class="config-option mp-time-opt" data-time="30">30 Seconds</span>
+                                        <span class="config-option active mp-time-opt" data-time="60">60 Seconds</span>
+                                        <span class="config-option mp-time-opt" data-time="120">120 Seconds</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="room-actions">
+                                <div class="room-input-group">
+                                    <input type="text" id="room-input" class="cyber-input" placeholder="ROOM_CODE" maxlength="4">
+                                    <button class="cyber-btn" id="join-btn">JOIN ROOM</button>
+                                    <button class="cyber-btn cyber-btn-outline" id="create-btn">CREATE ROOM</button>
+                                </div>
+
+                                <button class="cyber-btn" id="start-bot-match-btn" style="width: 100%; background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); color: #000;">
+                                    <span>⚡ QUICK MATCH VS AI BOT</span>
+                                </button>
+
+                                <div class="lobby-status-terminal" id="lobby-status">
+                                    <span style="color: var(--accent-primary);">⚡</span>
+                                    <span id="lobby-status-text">STATUS: Enter your pilot username and create/join a match.</span>
+                                </div>
+                            </div>
+
+                            <!-- WAITING ROOM CARD -->
+                            <div id="mp-waiting-room" class="waiting-room-card" style="display: none;">
+                                <div style="font-size: 0.8rem; letter-spacing: 2px; color: var(--accent-primary); font-weight: 800;">// MATCH_WAITING_ROOM</div>
+                                
+                                <div class="waiting-pilots-grid">
+                                    <div class="pilot-status-card" id="pilot-p1-card">
+                                        <div class="pilot-avatar-box">P1</div>
+                                        <div class="pilot-name-text" id="p1-name-display">Priyanshu</div>
+                                        <div class="pilot-ready-badge" id="p1-ready-badge">READY ✓</div>
+                                    </div>
+
+                                    <div class="vs-divider">VS</div>
+
+                                    <div class="pilot-status-card waiting" id="pilot-p2-card">
+                                        <div class="pilot-avatar-box">P2</div>
+                                        <div class="pilot-name-text" id="p2-name-display">Waiting for opponent...</div>
+                                        <div class="pilot-ready-badge" id="p2-ready-badge">NOT READY</div>
+                                    </div>
+                                </div>
+
+                                <div class="waiting-actions">
+                                    <button class="cyber-btn" id="ready-toggle-btn" style="min-width: 180px;">
+                                        <span>I'M READY ✓</span>
+                                    </button>
+                                    <button class="cyber-btn cyber-btn-outline" id="cancel-match-btn">
+                                        <span>CANCEL MATCH</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- LOBBY SIDEBAR -->
+                        <div class="cyber-card">
+                            <div class="card-title">
+                                <svg viewBox="0 0 24 24"><line x1="22" y1="12" x2="18" y2="12"></line><line x1="6" y1="12" x2="2" y2="12"></line><line x1="12" y1="6" x2="12" y2="2"></line><line x1="12" y1="22" x2="12" y2="18"></line></svg>
+                                <span>Network & Match Server</span>
+                            </div>
+                            <div style="display: flex; flex-direction: column; gap: 14px; font-size: 0.85rem;">
+                                <div style="display: flex; justify-content: space-between;">
+                                    <span style="color: var(--text-muted);">REGION</span>
+                                    <span style="color: var(--text-primary); font-weight: 600;">US-EAST (N. VIRGINIA)</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between;">
+                                    <span style="color: var(--text-muted);">LATENCY</span>
+                                    <span style="color: var(--accent-primary); font-weight: 700;">14 ms [STABLE]</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between;">
+                                    <span style="color: var(--text-muted);">WEBSOCKET STATUS</span>
+                                    <span style="color: var(--accent-primary); font-weight: 700;">CONNECTED</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STAGE 2: MATCH FOUND VS SCREEN -->
+                <div id="mp-stage-vs" class="mp-stage">
+                    <div class="vs-screen-card">
+                        <div style="font-size: 0.85rem; letter-spacing: 3px; color: var(--accent-primary); font-weight: 800;">// MATCH_FOUND_CONFIRMED</div>
+                        
+                        <div class="vs-hero-grid">
+                            <div class="vs-player-hero">
+                                <div class="vs-avatar" id="vs-p1-avatar">P1</div>
+                                <div class="vs-player-name" id="vs-p1-name">Priyanshu</div>
+                                <div class="vs-ready-tag">READY ✓</div>
+                            </div>
+
+                            <div class="vs-center-badge">
+                                <span class="vs-text">VS</span>
+                                <span class="vs-time-badge" id="vs-time-display">Race Time: 60s</span>
+                            </div>
+
+                            <div class="vs-player-hero">
+                                <div class="vs-avatar opponent" id="vs-p2-avatar">P2</div>
+                                <div class="vs-player-name" id="vs-p2-name">Alex</div>
+                                <div class="vs-ready-tag">READY ✓</div>
+                            </div>
+                        </div>
+
+                        <div style="font-size: 1.1rem; font-weight: 700; color: var(--accent-primary); margin-top: 10px;" class="pulse-text">
+                            STARTING RACE SOON...
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STAGE 3: DEDICATED RACE ARENA SCREEN -->
+                <div id="mp-stage-race" class="mp-stage">
+                    <div class="mp-race-arena-card">
+                        <div class="mp-race-hud-bar">
+                            <div class="hud-box">
+                                <span class="hud-label">LIVE POSITION</span>
+                                <span class="hud-value" id="mp-live-rank-badge">🥇 1ST PLACE</span>
+                            </div>
+                            <div class="hud-box">
+                                <span class="hud-label">TIME REMAINING</span>
+                                <span class="hud-value secondary" id="mp-live-timer">60s</span>
+                            </div>
+                            <div class="hud-box">
+                                <span class="hud-label">SPEED</span>
+                                <span class="hud-value" id="mp-live-wpm">0 WPM</span>
+                            </div>
+                            <div class="hud-box">
+                                <span class="hud-label">ACCURACY</span>
+                                <span class="hud-value secondary" id="mp-live-accuracy">100%</span>
+                            </div>
+                        </div>
+
+                        <!-- LIVE TELEMETRY TRACK BARS -->
+                        <div class="mp-telemetry-tracks">
+                            <div class="telemetry-lane">
+                                <div class="lane-header">
+                                    <span id="mp-track-p1-name">YOU (Priyanshu)</span>
+                                    <span id="p1-stats-label">0% | 0 WPM</span>
+                                </div>
+                                <div class="lane-progress-bg">
+                                    <div class="lane-progress-fill" id="p1-progress-fill"></div>
+                                </div>
+                            </div>
+
+                            <div class="telemetry-lane">
+                                <div class="lane-header">
+                                    <span style="color: var(--accent-secondary);" id="mp-track-p2-name">OPPONENT (Alex)</span>
+                                    <span id="p2-stats-label" style="color: var(--accent-secondary);">0% | 0 WPM</span>
+                                </div>
+                                <div class="lane-progress-bg">
+                                    <div class="lane-progress-fill opponent" id="p2-progress-fill"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- DEDICATED RACE TYPING TEXT -->
+                        <div class="typing-arena-card" id="mp-arena-card" style="margin-top: 16px; min-height: 200px;">
+                            <div id="mp-words-clip" style="position: relative; height: 130px; overflow: hidden; line-height: 2.2; font-size: 1.6rem; user-select: none;">
+                                <div id="mp-caret" class="caret"></div>
+                                <div id="mp-words-wrapper" class="words-wrapper"></div>
+                            </div>
+                            <input type="text" id="mp-typing-input" autocomplete="off">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STAGE 4: DEDICATED RESULTS SCREEN & CARTOON ANIMATION -->
+                <div id="mp-stage-results" class="mp-stage">
+                    <div class="mp-results-card">
+                        
+                        <!-- PLAYFUL CARTOON WINNER ANIMATION STAGE -->
+                        <div id="cartoon-stage-box" class="cartoon-stage-container">
+                            <div class="cartoon-header" style="justify-content: flex-end;">
+                                <button class="cyber-btn cyber-btn-outline" id="skip-cartoon-btn" style="padding: 4px 10px; font-size: 0.7rem;">SKIP ANIMATION ⏭️</button>
+                            </div>
+                            <div id="cartoon-stage" class="cartoon-stage-viewport">
+                                <div id="cartoon-winner" class="cartoon-character winner">🏆</div>
+                                <div id="cartoon-prop" class="cartoon-prop"></div>
+                                <div id="cartoon-loser" class="cartoon-character loser">💀</div>
+                            </div>
+                        </div>
+
+                        <div class="results-podium-grid">
+                            <div class="podium-card first" id="podium-p1-card">
+                                <div class="podium-rank-badge">🥇 1ST PLACE</div>
+                                <div class="podium-avatar" id="podium-w-avatar">👑</div>
+                                <div class="podium-name" id="podium-w-name">Priyanshu</div>
+                                <div class="podium-wpm" id="podium-w-wpm">92 WPM</div>
+                                <div style="font-size: 0.8rem; color: var(--text-secondary);" id="podium-w-acc">Accuracy: 99%</div>
+                            </div>
+
+                            <div class="podium-card second" id="podium-p2-card">
+                                <div class="podium-rank-badge">🥈 2ND PLACE</div>
+                                <div class="podium-avatar" id="podium-l-avatar">⚡</div>
+                                <div class="podium-name" id="podium-l-name">Alex</div>
+                                <div class="podium-wpm" id="podium-l-wpm">74 WPM</div>
+                                <div style="font-size: 0.8rem; color: var(--text-secondary);" id="podium-l-acc">Accuracy: 96%</div>
+                            </div>
+                        </div>
+
+                        <!-- TELEMETRY BREAKDOWN MATRIX -->
+                        <div class="result-grid" style="margin-top: 12px;">
+                            <div class="result-metric">
+                                <span class="label">RACE DURATION</span>
+                                <span class="value white" id="res-time-val">60s</span>
+                            </div>
+                            <div class="result-metric">
+                                <span class="label">CHARACTERS TYPED</span>
+                                <span class="value white" id="res-chars-val">340</span>
+                            </div>
+                            <div class="result-metric">
+                                <span class="label">MISTAKES</span>
+                                <span class="value white" id="res-errors-val">2</span>
+                            </div>
+                            <div class="result-metric">
+                                <span class="label">MATCH STATUS</span>
+                                <span class="value" id="res-status-val">VICTORY</span>
+                            </div>
+                        </div>
+
+                        <!-- REPLAY CONTROLS -->
+                        <div class="mp-replay-bar">
+                            <button class="cyber-btn" id="mp-play-again-btn">
+                                <span>PLAY AGAIN</span>
+                            </button>
+                            <button class="cyber-btn cyber-btn-outline" id="mp-new-opponent-btn">
+                                <span>NEW OPPONENT</span>
+                            </button>
+                            <button class="cyber-btn cyber-btn-outline" id="mp-change-time-btn">
+                                <span>CHANGE RACE TIME</span>
+                            </button>
+                            <button class="cyber-btn cyber-btn-outline" id="mp-return-home-btn">
+                                <span>RETURN TO HOME</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- 4. LEADERBOARD VIEW -->
+            <section id="leaderboard-view" class="page-view">
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <div style="font-size: 1.4rem; font-weight: 800;">GLOBAL RACER RANKINGS</div>
+                    <div class="config-group">
+                        <span class="config-option active">Local Matrix History</span>
+                    </div>
+                </div>
+
+                <div id="leaderboard-content-area"></div>
+            </section>
+
+            <!-- 5. STATISTICS VIEW -->
+            <section id="stats-view" class="page-view">
+                <div id="stats-content-area"></div>
+            </section>
+
+            <!-- 6. PROFILE VIEW -->
+            <section id="profile-view" class="page-view">
+                <div id="profile-content-area"></div>
+            </section>
+
+            <!-- 7. SETTINGS VIEW -->
+            <section id="settings-view" class="page-view">
+                <div class="settings-grid">
+                    <div class="setting-row">
+                        <div>
+                            <div style="font-weight: 700;">Color Theme Identity</div>
+                            <div style="font-size: 0.8rem; color: var(--text-muted);">Select from 3 curated cyber aesthetic themes.</div>
+                        </div>
+                        <div class="config-group">
+                            <span class="config-option active" id="theme-opt-green">Cyber Green</span>
+                            <span class="config-option" id="theme-opt-bw">Midnight B&W</span>
+                            <span class="config-option" id="theme-opt-blue">Electric Blue</span>
+                        </div>
+                    </div>
+
+                    <div class="setting-row">
+                        <div>
+                            <div style="font-weight: 700;">Typography Font</div>
+                            <div style="font-size: 0.8rem; color: var(--text-muted);">Choose developer-focused monospace typography.</div>
+                        </div>
+                        <div class="config-group">
+                            <span class="config-option active">JetBrains Mono</span>
+                            <span class="config-option">IBM Plex Mono</span>
+                            <span class="config-option">Inter</span>
+                        </div>
+                    </div>
+
+                    <div class="setting-row">
+                        <div>
+                            <div style="font-weight: 700;">Synthesized Keyclick Sound</div>
+                            <div style="font-size: 0.8rem; color: var(--text-muted);">Audio feedback on keypresses via Web Audio API.</div>
+                        </div>
+                        <button class="cyber-btn cyber-btn-outline" id="settings-sound-toggle">
+                            <span>ENABLED</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- TOAST CONTAINER -->
+    <div id="toast-container"></div>
+
+    <!-- MODULE SCRIPTS -->
+    <script type="module" src="script.js"></script>
+</body>
 
 </html>
