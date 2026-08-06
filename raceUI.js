@@ -1,52 +1,52 @@
-function moveRunner(containerId, runnerId, progress) {
+export function updateMyRunner(progress, wpm = 0) {
+    const fill = document.getElementById('p1-progress-fill');
+    const label = document.getElementById('p1-stats-label');
 
-    const container = document.getElementById(containerId);
-    const runner = document.getElementById(runnerId);
+    const roundedProgress = Math.min(100, Math.max(0, Math.round(progress)));
 
-    const track = document.querySelector('.race-track');
+    if (fill) {
+        fill.style.width = `${roundedProgress}%`;
+    }
 
-    if (!container || !runner || !track) return;
-
-    const maxDistance = track.offsetWidth - 120;
-
-    const moveX = (progress / 100) * maxDistance;
-
-    container.style.transform = `translateX(${moveX}px)`;
-
-    runner.classList.add('running');
-
-    clearTimeout(runner.stopTimer);
-
-    runner.stopTimer = setTimeout(() => {
-        runner.classList.remove('running');
-    }, 120);
+    if (label) {
+        label.innerText = `${roundedProgress}% | ${wpm} WPM`;
+    }
 }
 
-export function updateMyRunner(progress) {
-    moveRunner('p1-container', 'p1-runner', progress);
+export function updateOpponentRunner(progress, wpm = 0) {
+    const fill = document.getElementById('p2-progress-fill');
+    const label = document.getElementById('p2-stats-label');
+
+    const roundedProgress = Math.min(100, Math.max(0, Math.round(progress)));
+
+    if (fill) {
+        fill.style.width = `${roundedProgress}%`;
+    }
+
+    if (label) {
+        label.innerText = `${roundedProgress}% | ${wpm} WPM`;
+    }
 }
 
-export function updateOpponentRunner(progress) {
-    moveRunner('p2-container', 'p2-runner', progress);
-}
-
-export function showWinner(text) {
-
+export function showWinner(text, summary = "") {
     const overlay = document.getElementById('winner-overlay');
     const winnerText = document.getElementById('winner-text');
+    const winnerSummary = document.getElementById('winner-stats-summary');
 
     if (!overlay || !winnerText) return;
 
     winnerText.innerText = text;
+    
+    if (winnerSummary && summary) {
+        winnerSummary.innerText = summary;
+    }
 
-    overlay.classList.remove('hidden');
+    overlay.classList.add('active');
 }
 
 export function hideWinner() {
-
     const overlay = document.getElementById('winner-overlay');
-
-    if (!overlay) return;
-
-    overlay.classList.add('hidden');
+    if (overlay) {
+        overlay.classList.remove('active');
+    }
 }
