@@ -4,60 +4,21 @@ import {
     showWinner,
     hideWinner,
 } from "./raceUI.js";
+import { escapeHTML } from "./js/core/sanitize.js";
+import { baseWords, numberWords, punctuationWords, practiceDrills } from "./js/core/words.js";
+import {
+    getPersonalBest,
+    getRaceHistory,
+    getStoredPilotName,
+    savePersonalBest,
+    saveRaceHistory,
+    saveStoredPilotName,
+} from "./js/core/storage.js";
+import { initializeAudio, playSound } from "./js/core/audio.js";
+import { initializeTheme } from "./js/core/preferences.js";
+import { showToast } from "./js/core/feedback.js";
+import { initializeBackgroundCanvas } from "./js/effects/backgroundCanvas.js";
 
-// SANITIZATION HELPER (XSS PREVENTION)
-function escapeHTML(str) {
-    if (!str) return "";
-    return String(str)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-}
-
-// WORD DICTIONARIES
-const baseWords = [
-    "the", "be", "to", "of", "and", "a", "in", "that", "have", "it",
-    "for", "not", "on", "with", "he", "as", "you", "do", "at", "this",
-    "but", "his", "by", "from", "they", "we", "say", "her", "she", "or",
-    "an", "will", "my", "one", "all", "would", "there", "their", "what", "so",
-    "up", "out", "if", "about", "who", "get", "which", "go", "me", "when",
-    "make", "can", "like", "time", "no", "just", "him", "know", "take", "people",
-    "into", "year", "your", "good", "some", "could", "them", "see", "other", "than",
-    "then", "now", "look", "only", "come", "its", "over", "think", "also", "back",
-    "after", "use", "two", "how", "our", "work", "first", "well", "way", "even",
-    "new", "want", "because", "any", "these", "give", "day", "most", "us", "great",
-    "between", "need", "large", "often", "hand", "high", "place", "hold", "turn", "were",
-    "does", "set", "put", "end", "why", "again", "off", "talk", "stand", "own",
-    "such", "move", "live", "never", "before", "find", "real", "while", "each", "tell",
-    "last", "keep", "children", "side", "begin", "got", "walk", "example", "ease", "paper",
-    "group", "always", "music", "those", "both", "mark", "book", "letter", "until", "mile",
-    "river", "car", "feet", "care", "second", "enough", "plain", "girl", "usual", "young",
-    "ready", "above", "ever", "red", "list", "though", "feel", "talk", "bird", "soon"
-];
-
-const punctuationWords = [
-    "hello,", "world.", "yes,", "no.", "wait!", "really?", "okay,", "sure.",
-    "system;", "code:", "data=", "matrix,", "velocity!", "cyber."
-];
-const numberWords = ["123", "456", "789", "2026", "100", "50", "25", "99"];
-
-// PRACTICE DRILL DICTIONARIES
-const practiceDrills = {
-    trigrams: [
-        "the", "and", "ing", "her", "hat", "his", "tha", "ere", "for", "ent", "ion", "ter", "was", "you", "ith", "ver", "all", "wit", "thi", "tio"
-    ],
-    weak: [
-        "pinky: p q z a ; ring: o w s x middle: i e d c index: u y r f v t g b"
-    ],
-    code: [
-        "const calculateVelocity = (dist, time) => dist / time; if (status === 200) { return response.json(); }"
-    ],
-    symbols: [
-        "!@#$%^&*()_+-=[]{}|;:'\",.<>/?~`"
-    ]
-};
 
 // SOCKET & MULTIPLAYER COMPETITIVE ENGINE STATE
 const socket = io();
@@ -68,7 +29,7 @@ let gameState = "waiting";
 let botInterval = null;
 
 // MULTIPLAYER COMPETITIVE STAGE STATE
-let mpUsername = escapeHTML(localStorage.getItem("vk_pilot_name") || "Priyanshu");
+let mpUsername = escapeHTML(getStoredPilotName() || "Priyanshu");
 let opponentUsername = "Alex";
 let mpRaceDuration = 60;
 let mpP1Ready = false;
@@ -99,8 +60,6 @@ let incorrectChars = 0;
 let totalTyped = 0;
 let includePunctuation = false;
 let includeNumbers = false;
-let soundEnabled = true;
-let currentTheme = localStorage.getItem("vk_theme") || "cyber-green";
 let wpmHistory = [];
 
 // PRACTICE STATE
@@ -135,32 +94,12 @@ const lobbyStatus = document.getElementById("lobby-status");
 const lobbyStatusText = document.getElementById("lobby-status-text");
 const startBotMatchBtn = document.getElementById("start-bot-match-btn");
 
-const soundToggleBtn = document.getElementById("sound-toggle-btn");
-const themeToggleBtn = document.getElementById("theme-toggle-btn");
-const soundBtnLabel = document.getElementById("sound-btn-label");
-const themeBtnLabel = document.getElementById("theme-btn-label");
-
-// LOCAL STORAGE REAL RACE HISTORY MANAGER
-function getRaceHistory() {
-    try {
-        const raw = localStorage.getItem("vk_race_history");
-        return raw ? JSON.parse(raw) : [];
-    } catch (e) {
-        return [];
-    }
-}
-
-function saveRaceHistory(entry) {
-    const history = getRaceHistory();
-    history.unshift(entry);
-    localStorage.setItem("vk_race_history", JSON.stringify(history.slice(0, 100)));
-}
-
 // INITIALIZATION
 document.addEventListener("DOMContentLoaded", () => {
-    initTheme(currentTheme);
+    initializeTheme(showToast);
+    initializeAudio(showToast);
     initBootLoader();
-    initCanvasAnimation();
+    initializeBackgroundCanvas();
     initNavigationRouter();
     initTest();
     initPracticeEngine();
@@ -175,35 +114,6 @@ document.addEventListener("DOMContentLoaded", () => {
         updateMpCaret();
     });
 });
-
-// THEME SYSTEM
-function initTheme(themeName) {
-    currentTheme = themeName;
-    document.documentElement.setAttribute("data-theme", themeName);
-    localStorage.setItem("vk_theme", themeName);
-
-    if (themeBtnLabel) {
-        if (themeName === "cyber-green") themeBtnLabel.innerText = "THEME: GREEN";
-        else if (themeName === "midnight-bw") themeBtnLabel.innerText = "THEME: MONO";
-        else if (themeName === "electric-blue") themeBtnLabel.innerText = "THEME: BLUE";
-    }
-
-    document.querySelectorAll("[id^='theme-opt-']").forEach(opt => opt.classList.remove("active"));
-    if (themeName === "cyber-green") document.getElementById("theme-opt-green")?.classList.add("active");
-    if (themeName === "midnight-bw") document.getElementById("theme-opt-bw")?.classList.add("active");
-    if (themeName === "electric-blue") document.getElementById("theme-opt-blue")?.classList.add("active");
-}
-
-themeToggleBtn?.addEventListener("click", () => {
-    const themes = ["cyber-green", "midnight-bw", "electric-blue"];
-    const nextTheme = themes[(themes.indexOf(currentTheme) + 1) % themes.length];
-    initTheme(nextTheme);
-    showToast(`Switched theme to ${nextTheme.toUpperCase()}`);
-});
-
-document.getElementById("theme-opt-green")?.addEventListener("click", () => initTheme("cyber-green"));
-document.getElementById("theme-opt-bw")?.addEventListener("click", () => initTheme("midnight-bw"));
-document.getElementById("theme-opt-blue")?.addEventListener("click", () => initTheme("electric-blue"));
 
 // BOOT LOADER
 function initBootLoader() {
@@ -281,184 +191,6 @@ function navigateToPlay() {
 
     isMultiplayer = false;
     initTest();
-}
-
-// PURE MECHANICAL KEYBOARD SYNTHESIZER ENGINE
-let audioCtx = null;
-let isAudioWarmedUp = false;
-
-function getAudioContext() {
-    if (!audioCtx) {
-        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-        if (AudioContextClass) {
-            audioCtx = new AudioContextClass({ latencyHint: 'interactive' });
-        }
-    }
-    if (audioCtx && audioCtx.state === 'suspended') {
-        audioCtx.resume();
-    }
-    return audioCtx;
-}
-
-function warmupAudio() {
-    const ctx = getAudioContext();
-    if (!ctx) return;
-
-    if (ctx.state === 'suspended') {
-        ctx.resume();
-    }
-
-    if (!isAudioWarmedUp && ctx.state === 'running') {
-        try {
-            const buffer = ctx.createBuffer(1, 1, ctx.sampleRate);
-            const source = ctx.createBufferSource();
-            source.buffer = buffer;
-            source.connect(ctx.destination);
-            source.start(0);
-            isAudioWarmedUp = true;
-        } catch (e) {}
-    }
-}
-
-["pointerdown", "keydown", "focus", "mouseover", "touchstart"].forEach(evtName => {
-    window.addEventListener(evtName, warmupAudio, { passive: true });
-});
-
-function playSound(type) {
-    if (!soundEnabled) return;
-    warmupAudio();
-    const ctx = getAudioContext();
-    if (!ctx || ctx.state !== 'running') return;
-
-    try {
-        const now = ctx.currentTime;
-        const pitchVariance = (Math.random() - 0.5) * 0.15;
-
-        if (type === "click" || type === "space" || type === "backspace" || type === "enter") {
-            const isSpace = type === "space";
-            const isBackspace = type === "backspace";
-            const isEnter = type === "enter";
-
-            const clickBuffer = ctx.createBuffer(1, ctx.sampleRate * 0.02, ctx.sampleRate);
-            const output = clickBuffer.getChannelData(0);
-            for (let i = 0; i < clickBuffer.length; i++) {
-                output[i] = (Math.random() * 2 - 1) * Math.exp(-i / (ctx.sampleRate * 0.003));
-            }
-            const whiteNoise = ctx.createBufferSource();
-            whiteNoise.buffer = clickBuffer;
-
-            const filter = ctx.createBiquadFilter();
-            filter.type = "highpass";
-            filter.frequency.setValueAtTime((isSpace ? 1100 : isBackspace ? 3000 : isEnter ? 900 : 2500) * (1 + pitchVariance), now);
-
-            const clickGain = ctx.createGain();
-            clickGain.gain.setValueAtTime(isSpace || isEnter ? 0.38 : 0.28, now);
-            clickGain.gain.exponentialRampToValueAtTime(0.001, now + 0.02);
-
-            whiteNoise.connect(filter);
-            filter.connect(clickGain);
-            clickGain.connect(ctx.destination);
-            whiteNoise.start(now);
-
-            const thudOsc = ctx.createOscillator();
-            const thudGain = ctx.createGain();
-            thudOsc.type = "sine";
-            thudOsc.frequency.setValueAtTime((isSpace ? 100 : isEnter ? 90 : 150) * (1 + pitchVariance), now);
-            thudOsc.frequency.exponentialRampToValueAtTime(40, now + 0.045);
-
-            thudGain.gain.setValueAtTime(isSpace || isEnter ? 0.42 : 0.3, now);
-            thudGain.gain.exponentialRampToValueAtTime(0.001, now + 0.045);
-
-            thudOsc.connect(thudGain);
-            thudGain.connect(ctx.destination);
-            thudOsc.start(now);
-            thudOsc.stop(now + 0.045);
-
-        } else if (type === "error") {
-            const errOsc = ctx.createOscillator();
-            const errGain = ctx.createGain();
-            errOsc.type = "sawtooth";
-            errOsc.frequency.setValueAtTime(140, now);
-            errOsc.frequency.exponentialRampToValueAtTime(40, now + 0.1);
-
-            errGain.gain.setValueAtTime(0.35, now);
-            errGain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
-
-            errOsc.connect(errGain);
-            errGain.connect(ctx.destination);
-            errOsc.start(now);
-            errOsc.stop(now + 0.1);
-        } else if (type === "victory") {
-            const notes = [523.25, 659.25, 783.99, 1046.50];
-            notes.forEach((freq, i) => {
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-                osc.type = "triangle";
-                osc.frequency.setValueAtTime(freq, now + i * 0.08);
-                gain.gain.setValueAtTime(0.25, now + i * 0.08);
-                gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.08 + 0.3);
-                osc.connect(gain);
-                gain.connect(ctx.destination);
-                osc.start(now + i * 0.08);
-                osc.stop(now + i * 0.08 + 0.3);
-            });
-            triggerConfetti();
-        } else if (type === "slap") {
-            const osc = ctx.createOscillator();
-            const gain = ctx.createGain();
-            osc.type = "sawtooth";
-            osc.frequency.setValueAtTime(400, now);
-            osc.frequency.exponentialRampToValueAtTime(80, now + 0.15);
-            gain.gain.setValueAtTime(0.4, now);
-            gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
-            osc.connect(gain);
-            gain.connect(ctx.destination);
-            osc.start(now);
-            osc.stop(now + 0.15);
-        } else if (type === "boing") {
-            const osc = ctx.createOscillator();
-            const gain = ctx.createGain();
-            osc.type = "sine";
-            osc.frequency.setValueAtTime(150, now);
-            osc.frequency.exponentialRampToValueAtTime(600, now + 0.3);
-            gain.gain.setValueAtTime(0.4, now);
-            gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
-            osc.connect(gain);
-            gain.connect(ctx.destination);
-            osc.start(now);
-            osc.stop(now + 0.3);
-        }
-    } catch (e) {}
-}
-
-soundToggleBtn?.addEventListener("click", () => {
-    soundEnabled = !soundEnabled;
-    soundToggleBtn.classList.toggle("muted", !soundEnabled);
-    if (soundBtnLabel) soundBtnLabel.innerText = soundEnabled ? "SOUND: ON" : "SOUND: OFF";
-    showToast(soundEnabled ? "Mechanical Audio Synthesizer Enabled" : "Audio Synthesizer Muted");
-});
-
-document.getElementById("settings-sound-toggle")?.addEventListener("click", function() {
-    soundEnabled = !soundEnabled;
-    this.innerText = soundEnabled ? "ENABLED" : "MUTED";
-    soundToggleBtn?.classList.toggle("muted", !soundEnabled);
-    if (soundBtnLabel) soundBtnLabel.innerText = soundEnabled ? "SOUND: ON" : "SOUND: OFF";
-    showToast(soundEnabled ? "Mechanical Audio Synthesizer Enabled" : "Audio Synthesizer Muted");
-});
-
-// PERSONAL BEST HELPERS
-function getPersonalBest(duration) {
-    const pb = localStorage.getItem(`vk_pb_${duration}`);
-    return pb ? parseInt(pb) : null;
-}
-
-function savePersonalBest(duration, wpm) {
-    const currentPB = getPersonalBest(duration);
-    if (!currentPB || wpm > currentPB) {
-        localStorage.setItem(`vk_pb_${duration}`, wpm);
-        return true;
-    }
-    return false;
 }
 
 function updatePBDisplay() {
@@ -884,7 +616,7 @@ function initCompetitiveMultiplayer() {
         usernameInput.value = mpUsername;
         usernameInput.addEventListener("input", (e) => {
             mpUsername = escapeHTML(e.target.value.trim() || "Priyanshu");
-            localStorage.setItem("vk_pilot_name", mpUsername);
+            saveStoredPilotName(mpUsername);
         });
     }
 
@@ -1677,113 +1409,3 @@ function renderResultChart() {
     `;
 }
 
-// TOAST NOTIFICATIONS
-function showToast(message) {
-    const container = document.getElementById("toast-container");
-    if (!container) return;
-
-    const toast = document.createElement("div");
-    toast.className = "toast";
-    toast.innerHTML = `<span style="color: var(--accent-primary);">//</span> ${escapeHTML(message)}`;
-    container.appendChild(toast);
-
-    setTimeout(() => {
-        toast.remove();
-    }, 3000);
-}
-
-// CONFETTI PARTICLE ANIMATION
-function triggerConfetti() {
-    const canvas = document.getElementById("confetti-canvas");
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    const particles = Array.from({ length: 80 }, () => ({
-        x: Math.random() * canvas.width,
-        y: -10,
-        vx: (Math.random() - 0.5) * 4,
-        vy: Math.random() * 4 + 2,
-        color: ["#00FF66", "#00E5FF", "#FFFFFF", "#FFD700"][Math.floor(Math.random() * 4)],
-        size: Math.random() * 6 + 4
-    }));
-
-    let animationFrame;
-    let frames = 0;
-
-    function render() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        particles.forEach(p => {
-            p.x += p.vx;
-            p.y += p.vy;
-            ctx.fillStyle = p.color;
-            ctx.fillRect(p.x, p.y, p.size, p.size);
-        });
-
-        frames++;
-        if (frames < 180) {
-            animationFrame = requestAnimationFrame(render);
-        } else {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-        }
-    }
-    render();
-}
-
-// CANVAS PARTICLE BACKGROUND
-function initCanvasAnimation() {
-    const canvas = document.getElementById("cyber-bg-canvas");
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-
-    let width = canvas.width = window.innerWidth;
-    let height = canvas.height = window.innerHeight;
-
-    window.addEventListener("resize", () => {
-        width = canvas.width = window.innerWidth;
-        height = canvas.height = window.innerHeight;
-    });
-
-    const particles = Array.from({ length: 45 }, () => ({
-        x: Math.random() * width,
-        y: Math.random() * height,
-        vx: (Math.random() - 0.5) * 0.4,
-        vy: (Math.random() - 0.5) * 0.4,
-        radius: Math.radius * 1.5 + 0.5 || 1.5
-    }));
-
-    function animate() {
-        ctx.clearRect(0, 0, width, height);
-
-        ctx.fillStyle = "rgba(0, 255, 102, 0.15)";
-        ctx.strokeStyle = "rgba(0, 255, 102, 0.04)";
-
-        particles.forEach((p, i) => {
-            p.x += p.vx;
-            p.y += p.vy;
-
-            if (p.x < 0 || p.x > width) p.vx *= -1;
-            if (p.y < 0 || p.y > height) p.vy *= -1;
-
-            ctx.beginPath();
-            ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-            ctx.fill();
-
-            for (let j = i + 1; j < particles.length; j++) {
-                const p2 = particles[j];
-                const dist = Math.hypot(p.x - p2.x, p.y - p2.y);
-                if (dist < 120) {
-                    ctx.beginPath();
-                    ctx.moveTo(p.x, p.y);
-                    ctx.lineTo(p2.x, p2.y);
-                    ctx.stroke();
-                }
-            }
-        });
-
-        requestAnimationFrame(animate);
-    }
-
-    animate();
-}

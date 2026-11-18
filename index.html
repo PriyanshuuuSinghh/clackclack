@@ -10,11 +10,11 @@
     <link rel="stylesheet" href="style.css">
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-VEY3CJWR0H"></script>
     <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
 
-    gtag('config', 'G-VEY3CJWR0H');
+        gtag('config', 'G-VEY3CJWR0H');
     </script>
 </head>
 
@@ -27,9 +27,11 @@
     <div class="scanline-overlay"></div>
 
     <!-- FIXED GITHUB CORNER BADGE (Visible on all pages except Multiplayer) -->
-    <a href="https://github.com/PriyanshuuuSinghh" target="_blank" rel="noopener noreferrer" id="github-corner-badge" class="github-corner-badge" title="View Priyanshu on GitHub">
+    <a href="https://github.com/PriyanshuuuSinghh" target="_blank" rel="noopener noreferrer" id="github-corner-badge"
+        class="github-corner-badge" title="View Priyanshu on GitHub">
         <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
+            <path
+                d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z" />
         </svg>
         <span>GitHub</span>
     </a>
@@ -56,18 +58,23 @@
     <!-- FULLSCREEN COUNTDOWN OVERLAY -->
     <div id="countdown-overlay" class="modal-overlay">
         <div class="modal-box countdown-box">
-            <div style="font-size: 0.8rem; letter-spacing: 3px; color: var(--accent-primary); font-weight: 800;">// MATCH_COUNTDOWN</div>
+            <div style="font-size: 0.8rem; letter-spacing: 3px; color: var(--accent-primary); font-weight: 800;">//
+                MATCH_COUNTDOWN</div>
             <div id="countdown-num" class="countdown-num-pulse">3</div>
-            <div style="font-size: 0.85rem; color: var(--text-secondary);" id="countdown-subtext">GET YOUR FINGERS READY</div>
+            <div style="font-size: 0.85rem; color: var(--text-secondary);" id="countdown-subtext">GET YOUR FINGERS READY
+            </div>
         </div>
     </div>
 
     <!-- WINNER / RESULT OVERLAY MODAL -->
     <div id="winner-overlay" class="modal-overlay">
         <div class="modal-box">
-            <div style="font-size: 0.8rem; letter-spacing: 2px; color: var(--accent-primary);" id="winner-subtitle">// MATCH_RESULT</div>
-            <h1 id="winner-text" style="font-size: 2.2rem; font-weight: 800; color: var(--text-primary);">🏆 VICTORY ACHIEVED</h1>
-            <div id="winner-stats-summary" style="font-size: 0.9rem; color: var(--text-secondary);">WPM: -- | Accuracy: --%</div>
+            <div style="font-size: 0.8rem; letter-spacing: 2px; color: var(--accent-primary);" id="winner-subtitle">//
+                MATCH_RESULT</div>
+            <h1 id="winner-text" style="font-size: 2.2rem; font-weight: 800; color: var(--text-primary);">🏆 VICTORY
+                ACHIEVED</h1>
+            <div id="winner-stats-summary" style="font-size: 0.9rem; color: var(--text-secondary);">WPM: -- | Accuracy:
+                --%</div>
             <button id="play-again-btn" class="cyber-btn" style="margin: 0 auto; width: 200px;">
                 <span>RETURN TO LOBBY</span>
             </button>
@@ -81,9 +88,12 @@
         <header class="navbar">
             <div class="nav-brand" id="nav-brand-logo">
                 <svg class="brand-logo-svg" viewBox="0 0 64 64" fill="none">
-                    <rect width="64" height="64" rx="14" fill="#050505" stroke="var(--accent-primary)" stroke-width="2"/>
-                    <path d="M16 20 H48 V44 H16 Z" fill="none" stroke="var(--accent-primary)" stroke-width="3" stroke-linejoin="round"/>
-                    <path d="M22 28 H30 M22 36 H38 M34 28 H42" stroke="var(--accent-primary)" stroke-width="3" stroke-linecap="round"/>
+                    <rect width="64" height="64" rx="14" fill="#050505" stroke="var(--accent-primary)"
+                        stroke-width="2" />
+                    <path d="M16 20 H48 V44 H16 Z" fill="none" stroke="var(--accent-primary)" stroke-width="3"
+                        stroke-linejoin="round" />
+                    <path d="M22 28 H30 M22 36 H38 M34 28 H42" stroke="var(--accent-primary)" stroke-width="3"
+                        stroke-linecap="round" />
                 </svg>
                 <span class="brand-title">CLACK<span style="color: var(--accent-primary);">CLACK</span></span>
                 <span class="brand-tag">Matrix Edition</span>
@@ -91,31 +101,57 @@
 
             <nav class="nav-links">
                 <button class="nav-item active" data-target="play-view">
-                    <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                    <svg viewBox="0 0 24 24">
+                        <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                    </svg>
                     <span>Play</span>
                 </button>
                 <button class="nav-item" data-target="practice-view">
-                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v8M8 12h8"></path></svg>
+                    <svg viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M12 8v8M8 12h8"></path>
+                    </svg>
                     <span>Practice</span>
                 </button>
                 <button class="nav-item" data-target="multiplayer-view" id="multiplayer-nav-tab">
-                    <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                    <svg viewBox="0 0 24 24">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
                     <span>Multiplayer</span>
                 </button>
                 <button class="nav-item" data-target="leaderboard-view">
-                    <svg viewBox="0 0 24 24"><path d="M6 9H3a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1V10a1 1 0 0 0-1-1zM14 4h-3a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1zM22 13h-3a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-7a1 1 0 0 0-1-1z"></path></svg>
+                    <svg viewBox="0 0 24 24">
+                        <path
+                            d="M6 9H3a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1V10a1 1 0 0 0-1-1zM14 4h-3a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1zM22 13h-3a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-7a1 1 0 0 0-1-1z">
+                        </path>
+                    </svg>
                     <span>Leaderboard</span>
                 </button>
                 <button class="nav-item" data-target="stats-view">
-                    <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                    <svg viewBox="0 0 24 24">
+                        <line x1="18" y1="20" x2="18" y2="10"></line>
+                        <line x1="12" y1="20" x2="12" y2="4"></line>
+                        <line x1="6" y1="20" x2="6" y2="14"></line>
+                    </svg>
                     <span>Statistics</span>
                 </button>
                 <button class="nav-item" data-target="profile-view">
-                    <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    <svg viewBox="0 0 24 24">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
                     <span>Profile</span>
                 </button>
                 <button class="nav-item" data-target="settings-view">
-                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                    <svg viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path
+                            d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+                        </path>
+                    </svg>
                     <span>Settings</span>
                 </button>
             </nav>
@@ -123,11 +159,19 @@
             <!-- PROMINENT HIGHLIGHTED NAVBAR CONTROLS -->
             <div class="nav-controls">
                 <button class="nav-ctrl-btn" id="theme-toggle-btn" title="Cycle Color Theme">
-                    <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" fill="none" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path></svg>
+                    <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" fill="none" stroke-width="2">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <path
+                            d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42">
+                        </path>
+                    </svg>
                     <span id="theme-btn-label">THEME: GREEN</span>
                 </button>
                 <button class="nav-ctrl-btn active" id="sound-toggle-btn" title="Toggle Mechanical Audio">
-                    <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" fill="none" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                    <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" fill="none" stroke-width="2">
+                        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                        <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                    </svg>
                     <span id="sound-btn-label">SOUND: ON</span>
                 </button>
             </div>
@@ -183,7 +227,11 @@
 
                 <div class="arena-controls">
                     <button class="cyber-btn cyber-btn-outline" id="reset-test-btn">
-                        <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" fill="none" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
+                        <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" fill="none"
+                            stroke-width="2">
+                            <polyline points="23 4 23 10 17 10"></polyline>
+                            <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                        </svg>
                         <span>RESTART TEST</span>
                     </button>
                 </div>
@@ -192,7 +240,8 @@
                 <div id="result-screen" class="result-card" style="display: none;">
                     <div class="result-header">
                         <div class="result-title-group">
-                            <span style="font-size: 1.2rem; font-weight: 800; color: var(--text-primary);">// TEST_TELEMETRY_SUMMARY</span>
+                            <span style="font-size: 1.2rem; font-weight: 800; color: var(--text-primary);">//
+                                TEST_TELEMETRY_SUMMARY</span>
                             <span class="pb-badge" id="new-pb-badge" style="display: none;">🎉 NEW PB RECORD</span>
                         </div>
                         <button class="cyber-btn" id="result-restart-btn">
@@ -220,7 +269,8 @@
                     </div>
 
                     <div class="result-chart-box">
-                        <svg id="result-chart-svg" width="100%" height="100%" viewBox="0 0 500 150" preserveAspectRatio="none"></svg>
+                        <svg id="result-chart-svg" width="100%" height="100%" viewBox="0 0 500 150"
+                            preserveAspectRatio="none"></svg>
                     </div>
                 </div>
             </section>
@@ -229,12 +279,17 @@
             <section id="practice-view" class="page-view">
                 <div class="cyber-card">
                     <div class="card-title">
-                        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v8M8 12h8"></path></svg>
+                        <svg viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M12 8v8M8 12h8"></path>
+                        </svg>
                         <span>Precision Practice & Key Drills</span>
                     </div>
-                    <p style="color: var(--text-secondary); font-size: 0.85rem;">Select custom target keys or specialized drills to isolate accuracy bottlenecks.</p>
-                    
-                    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+                    <p style="color: var(--text-secondary); font-size: 0.85rem;">Select custom target keys or
+                        specialized drills to isolate accuracy bottlenecks.</p>
+
+                    <div
+                        style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
                         <div class="config-group" id="practice-category-group">
                             <span class="config-option active" data-drill="trigrams">Common Trigrams</span>
                             <span class="config-option" data-drill="weak">Weak Finger Drills</span>
@@ -259,7 +314,8 @@
                     </div>
 
                     <div class="typing-arena-card" id="practice-arena-card" style="min-height: 200px;">
-                        <div id="practice-words-clip" style="position: relative; height: 130px; overflow: hidden; line-height: 2.2; font-size: 1.5rem; user-select: none;">
+                        <div id="practice-words-clip"
+                            style="position: relative; height: 130px; overflow: hidden; line-height: 2.2; font-size: 1.5rem; user-select: none;">
                             <div id="practice-caret" class="caret"></div>
                             <div id="practice-words-wrapper" class="words-wrapper"></div>
                         </div>
@@ -268,7 +324,11 @@
 
                     <div style="display: flex; justify-content: center; gap: 12px;">
                         <button class="cyber-btn cyber-btn-outline" id="practice-restart-btn">
-                            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" fill="none" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
+                            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" fill="none"
+                                stroke-width="2">
+                                <polyline points="23 4 23 10 17 10"></polyline>
+                                <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                            </svg>
                             <span>RELOAD DRILL</span>
                         </button>
                     </div>
@@ -283,14 +343,18 @@
                     <div class="lobby-grid">
                         <div class="cyber-card">
                             <div class="card-title">
-                                <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="9" cy="7" r="4"></circle>
+                                </svg>
                                 <span>Cyber Competitive Matchmaking</span>
                             </div>
 
                             <div class="lobby-form-grid">
                                 <div class="form-field">
                                     <label class="form-label">YOUR PILOT USERNAME</label>
-                                    <input type="text" id="mp-username-input" class="cyber-input" placeholder="Enter Username..." maxlength="16">
+                                    <input type="text" id="mp-username-input" class="cyber-input"
+                                        placeholder="Enter Username..." maxlength="16">
                                 </div>
 
                                 <div class="form-field">
@@ -305,25 +369,30 @@
 
                             <div class="room-actions">
                                 <div class="room-input-group">
-                                    <input type="text" id="room-input" class="cyber-input" placeholder="ROOM_CODE" maxlength="4">
+                                    <input type="text" id="room-input" class="cyber-input" placeholder="ROOM_CODE"
+                                        maxlength="4">
                                     <button class="cyber-btn" id="join-btn">JOIN ROOM</button>
                                     <button class="cyber-btn cyber-btn-outline" id="create-btn">CREATE ROOM</button>
                                 </div>
 
-                                <button class="cyber-btn" id="start-bot-match-btn" style="width: 100%; background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); color: #000;">
+                                <button class="cyber-btn" id="start-bot-match-btn"
+                                    style="width: 100%; background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); color: #000;">
                                     <span>⚡ QUICK MATCH VS AI BOT</span>
                                 </button>
 
                                 <div class="lobby-status-terminal" id="lobby-status">
                                     <span style="color: var(--accent-primary);">⚡</span>
-                                    <span id="lobby-status-text">STATUS: Enter your pilot username and create/join a match.</span>
+                                    <span id="lobby-status-text">STATUS: Enter your pilot username and create/join a
+                                        match.</span>
                                 </div>
                             </div>
 
                             <!-- WAITING ROOM CARD -->
                             <div id="mp-waiting-room" class="waiting-room-card" style="display: none;">
-                                <div style="font-size: 0.8rem; letter-spacing: 2px; color: var(--accent-primary); font-weight: 800;">// MATCH_WAITING_ROOM</div>
-                                
+                                <div
+                                    style="font-size: 0.8rem; letter-spacing: 2px; color: var(--accent-primary); font-weight: 800;">
+                                    // MATCH_WAITING_ROOM</div>
+
                                 <div class="waiting-pilots-grid">
                                     <div class="pilot-status-card" id="pilot-p1-card">
                                         <div class="pilot-avatar-box">P1</div>
@@ -354,13 +423,19 @@
                         <!-- LOBBY SIDEBAR -->
                         <div class="cyber-card">
                             <div class="card-title">
-                                <svg viewBox="0 0 24 24"><line x1="22" y1="12" x2="18" y2="12"></line><line x1="6" y1="12" x2="2" y2="12"></line><line x1="12" y1="6" x2="12" y2="2"></line><line x1="12" y1="22" x2="12" y2="18"></line></svg>
+                                <svg viewBox="0 0 24 24">
+                                    <line x1="22" y1="12" x2="18" y2="12"></line>
+                                    <line x1="6" y1="12" x2="2" y2="12"></line>
+                                    <line x1="12" y1="6" x2="12" y2="2"></line>
+                                    <line x1="12" y1="22" x2="12" y2="18"></line>
+                                </svg>
                                 <span>Network & Match Server</span>
                             </div>
                             <div style="display: flex; flex-direction: column; gap: 14px; font-size: 0.85rem;">
                                 <div style="display: flex; justify-content: space-between;">
                                     <span style="color: var(--text-muted);">REGION</span>
-                                    <span style="color: var(--text-primary); font-weight: 600;">US-EAST (N. VIRGINIA)</span>
+                                    <span style="color: var(--text-primary); font-weight: 600;">US-EAST (N.
+                                        VIRGINIA)</span>
                                 </div>
                                 <div style="display: flex; justify-content: space-between;">
                                     <span style="color: var(--text-muted);">LATENCY</span>
@@ -378,8 +453,10 @@
                 <!-- STAGE 2: MATCH FOUND VS SCREEN -->
                 <div id="mp-stage-vs" class="mp-stage">
                     <div class="vs-screen-card">
-                        <div style="font-size: 0.85rem; letter-spacing: 3px; color: var(--accent-primary); font-weight: 800;">// MATCH_FOUND_CONFIRMED</div>
-                        
+                        <div
+                            style="font-size: 0.85rem; letter-spacing: 3px; color: var(--accent-primary); font-weight: 800;">
+                            // MATCH_FOUND_CONFIRMED</div>
+
                         <div class="vs-hero-grid">
                             <div class="vs-player-hero">
                                 <div class="vs-avatar" id="vs-p1-avatar">P1</div>
@@ -399,7 +476,8 @@
                             </div>
                         </div>
 
-                        <div style="font-size: 1.1rem; font-weight: 700; color: var(--accent-primary); margin-top: 10px;" class="pulse-text">
+                        <div style="font-size: 1.1rem; font-weight: 700; color: var(--accent-primary); margin-top: 10px;"
+                            class="pulse-text">
                             STARTING RACE SOON...
                         </div>
                     </div>
@@ -441,7 +519,8 @@
 
                             <div class="telemetry-lane">
                                 <div class="lane-header">
-                                    <span style="color: var(--accent-secondary);" id="mp-track-p2-name">OPPONENT (Alex)</span>
+                                    <span style="color: var(--accent-secondary);" id="mp-track-p2-name">OPPONENT
+                                        (Alex)</span>
                                     <span id="p2-stats-label" style="color: var(--accent-secondary);">0% | 0 WPM</span>
                                 </div>
                                 <div class="lane-progress-bg">
@@ -452,7 +531,8 @@
 
                         <!-- DEDICATED RACE TYPING TEXT -->
                         <div class="typing-arena-card" id="mp-arena-card" style="margin-top: 16px; min-height: 200px;">
-                            <div id="mp-words-clip" style="position: relative; height: 130px; overflow: hidden; line-height: 2.2; font-size: 1.6rem; user-select: none;">
+                            <div id="mp-words-clip"
+                                style="position: relative; height: 130px; overflow: hidden; line-height: 2.2; font-size: 1.6rem; user-select: none;">
                                 <div id="mp-caret" class="caret"></div>
                                 <div id="mp-words-wrapper" class="words-wrapper"></div>
                             </div>
@@ -464,11 +544,12 @@
                 <!-- STAGE 4: DEDICATED RESULTS SCREEN & CARTOON ANIMATION -->
                 <div id="mp-stage-results" class="mp-stage">
                     <div class="mp-results-card">
-                        
+
                         <!-- PLAYFUL CARTOON WINNER ANIMATION STAGE -->
                         <div id="cartoon-stage-box" class="cartoon-stage-container">
                             <div class="cartoon-header" style="justify-content: flex-end;">
-                                <button class="cyber-btn cyber-btn-outline" id="skip-cartoon-btn" style="padding: 4px 10px; font-size: 0.7rem;">SKIP ANIMATION ⏭️</button>
+                                <button class="cyber-btn cyber-btn-outline" id="skip-cartoon-btn"
+                                    style="padding: 4px 10px; font-size: 0.7rem;">SKIP ANIMATION ⏭️</button>
                             </div>
                             <div id="cartoon-stage" class="cartoon-stage-viewport">
                                 <div id="cartoon-winner" class="cartoon-character winner">🏆</div>
@@ -483,7 +564,8 @@
                                 <div class="podium-avatar" id="podium-w-avatar">👑</div>
                                 <div class="podium-name" id="podium-w-name">Priyanshu</div>
                                 <div class="podium-wpm" id="podium-w-wpm">92 WPM</div>
-                                <div style="font-size: 0.8rem; color: var(--text-secondary);" id="podium-w-acc">Accuracy: 99%</div>
+                                <div style="font-size: 0.8rem; color: var(--text-secondary);" id="podium-w-acc">
+                                    Accuracy: 99%</div>
                             </div>
 
                             <div class="podium-card second" id="podium-p2-card">
@@ -491,7 +573,8 @@
                                 <div class="podium-avatar" id="podium-l-avatar">⚡</div>
                                 <div class="podium-name" id="podium-l-name">Alex</div>
                                 <div class="podium-wpm" id="podium-l-wpm">74 WPM</div>
-                                <div style="font-size: 0.8rem; color: var(--text-secondary);" id="podium-l-acc">Accuracy: 96%</div>
+                                <div style="font-size: 0.8rem; color: var(--text-secondary);" id="podium-l-acc">
+                                    Accuracy: 96%</div>
                             </div>
                         </div>
 
@@ -563,7 +646,8 @@
                     <div class="setting-row">
                         <div>
                             <div style="font-weight: 700;">Color Theme Identity</div>
-                            <div style="font-size: 0.8rem; color: var(--text-muted);">Select from 3 curated cyber aesthetic themes.</div>
+                            <div style="font-size: 0.8rem; color: var(--text-muted);">Select from 3 curated cyber
+                                aesthetic themes.</div>
                         </div>
                         <div class="config-group">
                             <span class="config-option active" id="theme-opt-green">Cyber Green</span>
@@ -575,7 +659,8 @@
                     <div class="setting-row">
                         <div>
                             <div style="font-weight: 700;">Typography Font</div>
-                            <div style="font-size: 0.8rem; color: var(--text-muted);">Choose developer-focused monospace typography.</div>
+                            <div style="font-size: 0.8rem; color: var(--text-muted);">Choose developer-focused monospace
+                                typography.</div>
                         </div>
                         <div class="config-group">
                             <span class="config-option active">JetBrains Mono</span>
@@ -587,7 +672,8 @@
                     <div class="setting-row">
                         <div>
                             <div style="font-weight: 700;">Synthesized Keyclick Sound</div>
-                            <div style="font-size: 0.8rem; color: var(--text-muted);">Audio feedback on keypresses via Web Audio API.</div>
+                            <div style="font-size: 0.8rem; color: var(--text-muted);">Audio feedback on keypresses via
+                                Web Audio API.</div>
                         </div>
                         <button class="cyber-btn cyber-btn-outline" id="settings-sound-toggle">
                             <span>ENABLED</span>
