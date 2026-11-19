@@ -80,13 +80,16 @@ cd real-time-typing-race
 
 3. Install backend dependencies:
 ```bash
+cd server
 npm install
 ```
 
-4. Launch the application server:
+4. Launch the application server from the `server` directory:
 ```bash
-node server/index.js
+node index.js
 ```
+
+The Express server serves the frontend and the Socket.IO connection together. No separate frontend server is required.
 
 5. Open your browser and navigate to:
 ```txt
